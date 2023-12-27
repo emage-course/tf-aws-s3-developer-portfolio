@@ -26,3 +26,7 @@ java -jar $JENKINS_CLI -s $JENKINS_CJOC_URL -auth $JENKINS_AUTH list-masters | j
 	java -jar $JENKINS_CLI -s $url -auth $JENKINS_AUTH groovy = < configuration-script.groovy
 	java -jar $JENKINS_CLI -s $url -auth $JENKINS_AUTH install-plugin beer
 done
+
+###
+
+### Install blue, aws, ecr, s3 

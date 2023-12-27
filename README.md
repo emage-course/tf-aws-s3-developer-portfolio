@@ -37,3 +37,33 @@ Let’s apply the code to verify everything is working as it should before creat
 
 4. Run terraform apply to provision the infrastructure. When prompted type "ye" and click enter.
 
+
+
+#############
+
+AWS_DEFAULT_REGION=<region of bucket>
+
+AWS_ACCESS_KEY_ID=<aws id>
+
+AWS_SECRET_ACCESS_KEY=<your secret access key>
+
+#############
+
+<!-- 
+pipeline {
+    agent any
+pipeline {
+    agent any
+    stages {
+        stage('deploy') {
+            steps {
+              sh "aws configure set region $AWS_DEFAULT_REGION" 
+              sh "aws configure set aws_access_key_id $AWS_ACCESS_KEY_ID"  
+              sh "aws configure set aws_secret_access_key $AWS_SECRET_ACCESS_KEY"
+              sh "terraform init && terraform fmt && terraform validate && terraform plan"
+              sh "time terraform fmt && terraform validate && terraform apply -auto-approve"
+            }
+        }
+    }
+} -->
+
