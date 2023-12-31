@@ -6,7 +6,7 @@ sudo wget -O /etc/yum.repos.d/jenkins.repo https://pkg.jenkins.io/redhat-stable/
 sudo rpm --import https://pkg.jenkins.io/redhat-stable/jenkins.io-2023.key
 sudo yum upgrade -y
 sudo amazon-linux-extras install java-openjdk11 -y
-sudo dnf install java-11-amazon-corretto -y
+sudo yum install java-11-amazon-corretto -y
 sudo yum install git -y
 sudo yum install jenkins -y
 sudo systemctl enable jenkins
@@ -17,8 +17,8 @@ sudo cat /var/lib/jenkins/secrets/initialAdminPassword
 sudo wget -O /etc/yum.repos.d/cloudbees-core-oc.repo https://downloads.cloudbees.com/cloudbees-core/traditional/operations-center/rolling/rpm/cloudbees-core-oc.repo
 sudo rpm --import "https://downloads.cloudbees.com/jenkins-operations-center/rolling/rpm/cloudbees.com.key"
 sudo yum install cloudbees-core-oc -y 
-sudo yum httpd-core -y 
-sudo yum install httpd mod_ssl
+# sudo yum httpd-core -y 
+# sudo yum install httpd mod_ssl
 systemctl daemon-reload
 systemctl cloudbees-core-oc start
 systemctl enable cloudbees-core-oc
@@ -29,13 +29,16 @@ sudo yum-config-manager --add-repo https://rpm.releases.hashicorp.com/RHEL/hashi
 sudo yum install terraform -y 
 
 ### Install AWS CLI 
-
 curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
 unzip awscliv2.zip
 sudo ./aws/install
 
-### Install Jq, Git  
-sudo yum install -y jq git 
+### Install Jq, Git  s
+sudo yum install -y jq 
+
+### Install Ansible 
+sudo amazon-linux-extras install epel -y
+sudo yum --enablerepo epel install ansible -y
 
 ### Install Docker 
 sudo yum -y install git docker 
@@ -50,11 +53,10 @@ docker pull centos:latest
 docker images
 
 ### Configure Jenkins User 
-
 sudo echo "jenkins ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
 sudo usermod --shell /bin/bash jenkins 
 
-# use your email for Jenkins GitHub account
+# Use your email for Jenkins GitHub account
 sudo mkdir -p /var/lib/jenkins/.ssh/
 sudo chmod 777 -R /var/lib/jenkins/.ssh/
 sudo -u jenkins ssh-keygen -t ed25519 -C "kendops2@gmail.com" -N '' <<<''
@@ -64,11 +66,16 @@ sudo chown -R jenkins:jenkins /var/lib/jenkins/.ssh/
 sudo chmod -R u=rw,go=r /var/lib/jenkins/.ssh/id_ed25519.pub
 sudo chmod -R u=rw,go=-- /var/lib/jenkins/.ssh/id_ed25519
 
+### verify
 sudo ls -lrt /var/lib/jenkins/.ssh/
 sudo ls -lrtd /var/lib/jenkins/.ssh/
 sudo grep jenkins /etc/passwd 
 sudo grep jenkins /etc/sudoers
 sudo cat /var/lib/jenkins/secrets/initialAdminPassword 
+
+### Display SSH Keys
+sudo cat /var/lib/jenkins/.ssh/id_ed25519
+sudo cat /var/lib/jenkins/.ssh/id_ed25519.pub
 
 # helm repo add cloudbees https://public-charts.artifacts.cloudbees.com/repository/public/
 # helm repo update

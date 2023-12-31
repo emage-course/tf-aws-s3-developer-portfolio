@@ -3,7 +3,7 @@
 artifacts-s3bucket-jason2023 and will have a private ACL.
 */
 
-resource "aws_s3_bucket" "jenkins_artifacts_bucket" {
-  bucket = "jenkins-s3bucket-demo01" # Set a unique bucket name
-}
+# resource "aws_s3_bucket" "jenkins_artifacts_bucket" {
+#   bucket = "jenkins-s3bucket-demo01" # Set a unique bucket name
+# }
 
