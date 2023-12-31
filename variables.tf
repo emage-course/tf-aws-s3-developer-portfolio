@@ -33,3 +33,51 @@ variable "ssh_private_pair" {
   default = ""
   type    = string
 }
+
+####################################################
+
+### Optional 
+### For CloudFlare only 
+
+####################################################
+
+
+variable "hcp_client_id" {
+  type        = string
+  description = "vault-secret client id"
+  default     = ""
+}
+
+variable "hcp_client_secret" {
+  type        = string
+  description = "vault client secret id"
+  default     = ""
+}
+
+variable "cloudflare_api_key" {
+  description = "value of the api_key"
+  default     = ""
+}
+
+variable "cloudflare_api_token" {
+  default = ""
+}
+
+variable "cloudflare_email" {
+  default = ""
+}
+
+variable "domain" {
+  default = ""
+}
+
+
+# variable "cloudflare_email" {
+#   type        = string
+#   description = "clouflare email address"
+# }
+
+# variable "cloudflare_api_token" {
+#   type        = string
+#   description = "cloudflare api token"
+# }

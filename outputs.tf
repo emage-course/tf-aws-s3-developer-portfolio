@@ -27,3 +27,19 @@ output "jenkins_url" {
   description = "The public IP address of the Jenkins server"
   value       = join("", ["http://", aws_eip.jenkins_eip.public_ip, ":", "8080"])
 }
+
+####################################################
+
+### Optional 
+### For CloudFlare only 
+
+####################################################
+
+output "record" {
+  value       = join("", ["http://", cloudflare_record.devopx.hostname, ":", "8080"])
+}
+
+output "metadata" {
+  value     = cloudflare_record.devopx.metadata
+  sensitive = true
+}
