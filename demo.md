@@ -28,46 +28,12 @@ Terraform consists of three stages of workflow:
 **Plan:** Terraform creates an execution plan for your existing infrastructure and your configuration which describe the infrastructure it will create, update, or destroy.
 **Apply:**  Terraform perform all operations in correct order.
 
-The complete script will look like below:
-
-```sh
-pipeline {
-    agent any
-    tools {
-       terraform 'terraform'
-    }
-    stages {
-        stage('Git checkout') {
-           steps{
-                git branch: 'main', credentialsId: 'Github', url: 'https://github.com/muzakkirsaifi123/terraform_demo'
-            }
-        }
-        stage('terraform format check') {
-            steps{
-                sh 'terraform fmt'
-            }
-        }
-        stage('terraform Init') {
-            steps{
-                sh 'terraform init'
-            }
-        }
-        stage('terraform apply') {
-            steps{
-                sh 'terraform apply --auto-approve'
-            }
-        }
-    }    
-}
-```
-
 In this script, I have written the 4 stages. The first stage is used to get code from Github. The second stage is used to make the correct format of terraform files then terraform init stage installs the required plugin in the system and finally, terraform apply is used to apply all configurations.
 
 Step-4
 In the last, We are good to build this job.
 
 ##################################
-
 
 Step 1:
 Create the Seed Job using DSL
@@ -93,66 +59,6 @@ Create the Seed Job using DSL
 - Create a new Freestyle project in Jenkins and name it “Seed Job — Terraform Pipeline.”
 - In the “Build” section, select “Process Job DSLs” and provide the DSL script below:
 
-pipelineJob("Terraform Pipeline") {
-    definition {
-        cpsScm {
-            scm {
-                git('https://github.com/your-terraform-repo.git')
-            }
-            scriptPath('Jenkinsfile')
-        }
-    }
-}
-
-Step 6:
-Write the Jenkinsfile In your Terraform code repository, create a Jenkinsfile with the following stages:
-
-pipeline {
-    agent any
-    environment {
-        AWS_DEFAULT_REGION = 'your-aws-region'
-    }
-    stages {
-        stage('Checkout Code') {
-            steps {
-                checkout scm
-            }
-        }
-        stage('Terraform Init') {
-            steps {
-                script {
-                    sh 'terraform init'
-                }
-            }
-        }
-        stage('Terraform Plan') {
-            steps {
-                script {
-                    sh 'terraform plan -out=tfplan'
-                }
-            }
-        }
-        stage('Terraform Apply') {
-            steps {
-                script {
-                    sh 'terraform apply -auto-approve tfplan'
-                }
-            }
-        }
-        stage('Upload State to S3') {
-            steps {
-                script {
-                    sh 'aws s3 cp terraform.tfstate s3://your-bucket-name'
-                }
-            }
-        }
-    }
-    post {
-        always {
-            cleanWs()
-        }
-    }
-}
 
 Step 7:
 Configure Jenkins Job
@@ -169,10 +75,6 @@ Step 1: go to your GitHub repository and click on 'Settings'.
 Step 2: Click on Webhooks and then click on 'Add webhook'.
 Step 3: In the 'Payload URL' field, paste your Jenkins environment URL. ...
 Step 4: In the page 'Which events would you like to trigger this webhook?
-
-https://www.blazemeter.com/blog/how-to-integrate-your-github-repository-to-your-jenkins-project
-https://github.com/devops-cloud-org-1/tf-aws-ec2-demo/settings/hooks/new
-http://jenkins.kendopz.com:8080/github-webhook/
 
 ### Integrate Jenkins with Github (Private repo)
 

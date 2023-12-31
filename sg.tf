@@ -1,6 +1,6 @@
 # create security group for the ec2 instance
 resource "aws_security_group" "ec2_security_group" {
-  name        = "ec2 security group"
+  name        = "jenkins-sg"
   description = "allow access on ports 8080 and 22"
   vpc_id      = aws_default_vpc.default_vpc.id
 

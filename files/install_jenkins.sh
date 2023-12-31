@@ -49,13 +49,10 @@ sudo usermod -aG docker root
 docker pull centos:latest
 docker images
 
-sleep 5s 
-
 ### Configure Jenkins User 
 
 sudo echo "jenkins ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
-sudo chsh --shell /bin/bash jenkins 
-sudo grep jenkins /etc/passwd 
+sudo usermod --shell /bin/bash jenkins 
 
 # use your email for Jenkins GitHub account
 sudo mkdir -p /var/lib/jenkins/.ssh/
@@ -66,9 +63,12 @@ sudo chmod -R go=--- /var/lib/jenkins/.ssh/
 sudo chown -R jenkins:jenkins /var/lib/jenkins/.ssh/
 sudo chmod -R u=rw,go=r /var/lib/jenkins/.ssh/id_ed25519.pub
 sudo chmod -R u=rw,go=-- /var/lib/jenkins/.ssh/id_ed25519
-ls -lrt /var/lib/jenkins/.ssh/
-ls -lrtd /var/lib/jenkins/.ssh/
 
+sudo ls -lrt /var/lib/jenkins/.ssh/
+sudo ls -lrtd /var/lib/jenkins/.ssh/
+sudo grep jenkins /etc/passwd 
+sudo grep jenkins /etc/sudoers
+sudo cat /var/lib/jenkins/secrets/initialAdminPassword 
 
 # helm repo add cloudbees https://public-charts.artifacts.cloudbees.com/repository/public/
 # helm repo update
