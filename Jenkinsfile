@@ -10,6 +10,7 @@ pipeline {
     stage('Terraform Plan') {
       steps {
         script {
+          echo 'Pre-Build...'
           sh "terraform init && terraform fmt && terraform validate && terraform plan"
         }
 
@@ -19,6 +20,7 @@ pipeline {
     stage('Terraform Apply') {
       steps {
         script {
+          echo 'Building...'
           sh "time terraform fmt && terraform validate && terraform apply -auto-approve"
         }
 

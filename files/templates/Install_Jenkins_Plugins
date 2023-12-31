@@ -13,7 +13,7 @@ Now we need to install some plugins in our Jenkins service so that the pipeline 
 - aws
 - ecr 
 - s3 
-
+- Terraform 
 
 ### Creating ECR Repository
 ### Creating IAM Role

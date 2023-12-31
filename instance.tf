@@ -19,7 +19,8 @@ resource "null_resource" "name" {
     type        = "ssh"
     user        = "ec2-user"
     private_key = file("~/.ssh/id_rsa")
-    host        = aws_instance.ec2_instance.public_ip
+    host        = aws_eip.jenkins_eip.public_ip
+    # host        = aws_instance.ec2_instance.public_ip
   }
 
   # copy the install_jenkins.sh file from your computer to the ec2 instance 

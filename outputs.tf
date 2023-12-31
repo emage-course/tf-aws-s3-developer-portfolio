@@ -24,6 +24,6 @@ output "ssh_connection" {
 # }
 
 output "jenkins_url" {
-   description = "The public IP address of the Jenkins server"
-   value = join("", ["http://", aws_eip.jenkins_eip.public_ip, ":", "8080"])
+  description = "The public IP address of the Jenkins server"
+  value       = join("", ["http://", aws_eip.jenkins_eip.public_ip, ":", "8080"])
 }
