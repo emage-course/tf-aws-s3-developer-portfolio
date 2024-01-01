@@ -6,6 +6,8 @@ Now we need to install some plugins in our Jenkins service so that the pipeline 
 
 **Step 2:** Here, click on the Available tab and search for the following plugins
 
+Best Jenkins Plugins:
+
 - Docker
 - Docker Pipeline
 - Amazon ECR plugin
@@ -21,7 +23,23 @@ Now we need to install some plugins in our Jenkins service so that the pipeline 
 - GitHub 
 - GitLab 
 - GitHub AuthenticationVersion
-
+- LDAP 
+- Active Directory 
+- ⁠Artifactory
+- ⁠Blue Ocean
+- ⁠Maven Integration
+-⁠ ⁠Git Plugin
+- ⁠SonarQube Scanner
+- ⁠Slack-Jenkins Plugin
+- ⁠Amazon EC2
+- ⁠JaCoCo
+- ⁠Pipeline
+- ⁠Copy Artifact
+- ⁠Kubernetes Plugin
+- ⁠Docker Pipeline Plugin
+- ⁠⁠Kubernetes Continuous Deploy Plugin
+- ⁠⁠Kubernetes Secrets
+-⁠ ⁠⁠Hashicorp vault
 
 ### Configure Jenkins Job
 
@@ -60,40 +78,6 @@ Running Terraform in Jenkins involves setting up a Jenkins job or pipeline to au
 
 Pipeline: Create a Jenkinsfile in your project repository to define the pipeline. Below is an example Jenkinsfile for running Terraform commands using a declarative pipeline:
 
-pipeline {
-    agent any
-
-    stages {
-        stage('Checkout') {
-            steps {
-                checkout scm
-            }
-        }
-        stage('Terraform Init') {
-            steps {
-                sh 'cd /path/to/your/terraform/project && terraform init'
-            }
-        }
-        stage('Terraform Apply') {
-            steps {
-                sh 'cd /path/to/your/terraform/project && terraform apply -auto-approve'
-            }
-        }
-    }
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
 ### Creating ECR Repository
 ### Creating IAM Role
 
@@ -125,18 +109,5 @@ aws iam list-groups-for-user --user-name <User_name>
 aws iam create-role --role-name admin-role --assume-role-policy-document file://~/scripts/admin-role-trust-policy.json
 aws iam attach-role-policy --role-name admin-role --policy-arn "arn:aws:iam::aws:policy/AdministratorAccess"
 aws iam list-attached-role-policies --role-name admin-role
-
-admin-role-trust-policy.json
-
-{
-  "Version": "2012-10-17",
-  "Statement": {
-    "Effect": "Allow",
-    "Principal": {
-      "AWS": "00000000"
-    },
-    "Action": "sts:AssumeRole"
-  }
-}
 
 

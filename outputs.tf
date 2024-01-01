@@ -9,7 +9,7 @@ output "instance_id" {
 }
 
 output "ssh_connection" {
-  value       = "ssh ec2-user@${aws_eip.jenkins_eip.public_ip}"
+  value       = "ssh ec2-user@${cloudflare_record.devopx.hostname}"
   description = "Connect via SSH"
 }
 
@@ -36,7 +36,11 @@ output "jenkins_url" {
 ####################################################
 
 output "record" {
-  value       = join("", ["http://", cloudflare_record.devopx.hostname, ":", "8080"])
+  value = join("", ["http://", cloudflare_record.devopx.hostname, ":", "8080"])
+}
+
+output "record_cloudbees" {
+  value = join("", ["http://", cloudflare_record.devopx.hostname, ":", "8888"])
 }
 
 output "metadata" {
