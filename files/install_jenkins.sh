@@ -10,11 +10,14 @@ sudo yum install java-11-amazon-corretto -y
 sudo yum install git jq -y
 sudo yum install jenkins -y
 sudo systemctl enable jenkins
-sudo systemctl start jenkins
+sudo systemctl restart jenkins
+sudo systemctl status jenkins
 
 ### Configure Jenkins User 
 sudo su - 
+sudo useradd swilliams 
 sudo echo "jenkins ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
+sudo echo "swilliams ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
 sudo usermod --shell /bin/bash jenkins 
 
 ### Install cloudbees 
@@ -43,10 +46,17 @@ sudo ./aws/install
 sudo amazon-linux-extras install epel -y
 sudo yum --enablerepo epel install ansible -y
 
+### Configure ssh for jenkins 
 grep jenkins /etc/passwd 
 sudo su - jenkins
 mkdir ~/.kube
 ssh-keygen -t rsa -b 4096 -C "kendops2@gmail.com" -N '' <<<''
+ssh-keyscan github.com >> ~/.ssh/known_hosts
+
+### Configure ssh for swilliams 
+sudo su - jenkins
+mkdir ~/.kube
+sudo su - jenkins ssh-keygen -t rsa -b 4096 -C "kendops2@gmail.com" -N '' <<<''
 ssh-keyscan github.com >> ~/.ssh/known_hosts
 
 ### Instyall kubectl 
@@ -80,6 +90,7 @@ sudo set enforce 0
 sudo groupadd docker
 sudo usermod -aG docker ec2-user
 sudo usermod -aG docker jenkins 
+sudo usermod -aG docker swilliams 
 sudo usermod -aG docker root
 # docker pull centos:latest
 # docker images
@@ -95,17 +106,17 @@ sudo usermod -aG docker root
 # sudo chmod -R u=rw,go=-- /var/lib/jenkins/.ssh/id_rsa
 
 ### verify
-sudo ls -lrt /var/lib/jenkins/.ssh/
-sudo ls -lrtd /var/lib/jenkins/.ssh/
-sudo grep jenkins /etc/passwd 
-sudo grep jenkins /etc/sudoers
-sudo cat /var/lib/jenkins/secrets/initialAdminPassword 
-sudo cat /var/lib/cloudbees-core-oc/secrets/initialAdminPassword
+# sudo ls -lrt /var/lib/jenkins/.ssh/
+# sudo ls -lrtd /var/lib/jenkins/.ssh/
+# sudo grep jenkins /etc/passwd 
+# sudo grep jenkins /etc/sudoers
+# sudo cat /var/lib/jenkins/secrets/initialAdminPassword 
+# sudo cat /var/lib/cloudbees-core-oc/secrets/initialAdminPassword
 
 ### Display SSH Keys
-sudo cat /var/lib/jenkins/.ssh/id_rsa
-sudo cat /var/lib/jenkins/.ssh/id_rsa.pub 
-sudo grep jenkins /etc/sudoers
+# sudo cat /var/lib/jenkins/.ssh/id_rsa
+# sudo cat /var/lib/jenkins/.ssh/id_rsa.pub 
+# sudo grep jenkins /etc/sudoers
 
 # helm repo add cloudbees https://public-charts.artifacts.cloudbees.com/repository/public/
 # helm repo update

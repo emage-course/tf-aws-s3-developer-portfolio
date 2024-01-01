@@ -101,5 +101,6 @@ Give username as Jenkins or whatever you can remember. Add the Private key -> En
 ### Webhook GitHub with Jenkins
 Open your Github repository which you created and go to settings. Click on Hooks and press Add Webhook. After you are done with this follow the below image configuration and press Add webhook (green button). Now the Github webhook is also set.
 
+![webhook](../images/webhook.png)
 
-![Alt text](image.png)
+![cicd2](../iamges/cicd2.png)

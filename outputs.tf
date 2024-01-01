@@ -1,10 +1,10 @@
 # output "public_ip" {
-#   value       = formatlist("%s: %s", aws_instance.ec2_instance.*.public_dns, aws_instance.ec2_instance.*.public_ip)
+#   value       = formatlist("%s: %s", aws_instance.jenkins.*.public_dns, aws_instance.jenkins.*.public_ip)
 #   description = "Public IP Address of EC2 instance"
 # }
 
 output "instance_id" {
-  value       = aws_instance.ec2_instance.*.id
+  value       = aws_instance.jenkins.*.id
   description = "Instance ID"
 }
 
@@ -14,13 +14,13 @@ output "ssh_connection" {
 }
 
 # output "web_connection" {
-#   value       = "http://${aws_instance.ec2_instance.public_ip}:8080"
+#   value       = "http://${aws_instance.jenkins.public_ip}:8080"
 #   description = "Connect via SSH"
 # }
 
 # print the url of the jenkins server
 # output "jenkins_url" {
-#   value = join("", ["http://", aws_instance.ec2_instance.public_dns, ":", "8080"])
+#   value = join("", ["http://", aws_instance.jenkins.public_dns, ":", "8080"])
 # }
 
 output "jenkins_url" {

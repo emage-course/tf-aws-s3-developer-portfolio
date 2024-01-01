@@ -1,5 +1,5 @@
 # create security group for the ec2 instance
-resource "aws_security_group" "ec2_security_group" {
+resource "aws_security_group" "jenkins_sg" {
   name        = "jenkins-sg"
   description = "allow access on ports 8080 and 22"
   vpc_id      = aws_default_vpc.default_vpc.id
@@ -18,6 +18,15 @@ resource "aws_security_group" "ec2_security_group" {
     description = "ssh access"
     from_port   = 22
     to_port     = 22
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+
+  ingress {
+    description = "ssh access"
+    from_port   = 443
+    to_port     = 443
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }

@@ -1,0 +1,21 @@
+- name: NginxConfiguration
+  hosts: all
+  gather_facts: false
+  user: ec2-user
+  become: true
+  tasks:
+
+- name: Ensure apache is at the latest version
+  yum: name=nginx state=latest
+
+- name: Open port 80 for http access
+  copy:
+  src: index.html
+  dest: /var/www/html/
+  owner: root
+  group: root
+  mode: 0777
+
+- name: start Nginx
+  handlers:
+      service: name=nginx state=started
