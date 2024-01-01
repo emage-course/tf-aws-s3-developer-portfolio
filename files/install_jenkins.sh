@@ -7,11 +7,15 @@ sudo rpm --import https://pkg.jenkins.io/redhat-stable/jenkins.io-2023.key
 sudo yum upgrade -y
 sudo amazon-linux-extras install java-openjdk11 -y
 sudo yum install java-11-amazon-corretto -y
-sudo yum install git -y
+sudo yum install git jq -y
 sudo yum install jenkins -y
 sudo systemctl enable jenkins
 sudo systemctl start jenkins
-sudo cat /var/lib/jenkins/secrets/initialAdminPassword 
+
+### Configure Jenkins User 
+sudo su - 
+sudo echo "jenkins ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
+sudo usermod --shell /bin/bash jenkins 
 
 ### Install cloudbees 
 sudo wget -O /etc/yum.repos.d/cloudbees-core-oc.repo https://downloads.cloudbees.com/cloudbees-core/traditional/operations-center/rolling/rpm/cloudbees-core-oc.repo
@@ -35,44 +39,15 @@ curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip
 unzip awscliv2.zip
 sudo ./aws/install
 
-### Install Jq, Git  
-sudo yum install -y jq 
-
 ### Install Ansible 
 sudo amazon-linux-extras install epel -y
 sudo yum --enablerepo epel install ansible -y
 
-### Install Docker 
-sudo yum -y install git docker 
-sudo systemctl enable docker.service
-sudo systemctl start docker.service
-sudo systemctl status docker.service
-sudo set enforce 0
-sudo groupadd docker
-sudo usermod -aG docker ec2-user
-sudo usermod -aG docker jenkins 
-sudo usermod -aG docker root
-# docker pull centos:latest
-docker images
-
-sleep 20 
-
-### Configure Jenkins User 
-sudo echo "jenkins ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
-sudo usermod --shell /bin/bash jenkins 
-
+grep jenkins /etc/passwd 
 sudo su - jenkins
+mkdir ~/.kube
 ssh-keygen -t rsa -b 4096 -C "kendops2@gmail.com" -N '' <<<''
-
-# # Use your email for Jenkins GitHub account
-# sudo mkdir -p /var/lib/jenkins/.ssh/
-# sudo chmod 777 -R /var/lib/jenkins/.ssh/
-# # sudo -u jenkins ssh-keygen -t ed25519 -C "kendops2@gmail.com" -N '' <<<''
-# sudo chmod -R u=rwx /var/lib/jenkins/.ssh/
-# sudo chmod -R go=--- /var/lib/jenkins/.ssh/
-# sudo chown -R jenkins:jenkins /var/lib/jenkins/.ssh/
-# sudo chmod -R u=rw,go=r /var/lib/jenkins/.ssh/id_rsa.pub
-# sudo chmod -R u=rw,go=-- /var/lib/jenkins/.ssh/id_rsa
+ssh-keyscan github.com >> ~/.ssh/known_hosts
 
 ### Instyall kubectl 
 sudo curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
@@ -95,10 +70,29 @@ sudo mv  kustomize /usr/local/bin
 which kustomize
 kustomize version
 
-### Configure 
-# sudo su - jenkins 
-# mkdir ~/.kube
-# sudo chown -R jenkins: ~jenkins/.kube/
+### Install Docker 
+sudo su - 
+sudo yum -y install git docker 
+sudo systemctl enable docker.service
+sudo systemctl start docker.service
+sudo systemctl status docker.service
+sudo set enforce 0
+sudo groupadd docker
+sudo usermod -aG docker ec2-user
+sudo usermod -aG docker jenkins 
+sudo usermod -aG docker root
+# docker pull centos:latest
+# docker images
+
+# # Use your email for Jenkins GitHub account
+# sudo mkdir -p /var/lib/jenkins/.ssh/
+# sudo chmod 777 -R /var/lib/jenkins/.ssh/
+# # sudo -u jenkins ssh-keygen -t ed25519 -C "kendops2@gmail.com" -N '' <<<''
+# sudo chmod -R u=rwx /var/lib/jenkins/.ssh/
+# sudo chmod -R go=--- /var/lib/jenkins/.ssh/
+# sudo chown -R jenkins:jenkins /var/lib/jenkins/.ssh/
+# sudo chmod -R u=rw,go=r /var/lib/jenkins/.ssh/id_rsa.pub
+# sudo chmod -R u=rw,go=-- /var/lib/jenkins/.ssh/id_rsa
 
 ### verify
 sudo ls -lrt /var/lib/jenkins/.ssh/
@@ -108,12 +102,10 @@ sudo grep jenkins /etc/sudoers
 sudo cat /var/lib/jenkins/secrets/initialAdminPassword 
 sudo cat /var/lib/cloudbees-core-oc/secrets/initialAdminPassword
 
-### Configure Known Host
-ssh-keyscan github.com >> ~/.ssh/known_hosts
-
 ### Display SSH Keys
 sudo cat /var/lib/jenkins/.ssh/id_rsa
 sudo cat /var/lib/jenkins/.ssh/id_rsa.pub 
+sudo grep jenkins /etc/sudoers
 
 # helm repo add cloudbees https://public-charts.artifacts.cloudbees.com/repository/public/
 # helm repo update
