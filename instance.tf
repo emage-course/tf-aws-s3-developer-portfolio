@@ -4,8 +4,7 @@ resource "aws_instance" "jenkins" {
   instance_type          = var.instance_type
   subnet_id              = aws_default_subnet.default_az1.id
   vpc_security_group_ids = [aws_security_group.jenkins_sg.id]
-  # key_name               = aws_key_pair.ssh_key.key_name
-  key_name = file("files/id_rsa.pub")
+  key_name               = aws_key_pair.ssh_key.key_name
   user_data              = file("files/install_jenkins.sh")
 
 
