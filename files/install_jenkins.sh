@@ -47,17 +47,10 @@ sudo amazon-linux-extras install epel -y
 sudo yum --enablerepo epel install ansible -y
 
 ### Configure ssh for jenkins 
-grep jenkins /etc/passwd 
-sudo su - jenkins
-mkdir ~/.kube
-ssh-keygen -t rsa -b 4096 -C "kendops2@gmail.com" -N '' <<<''
-ssh-keyscan github.com >> ~/.ssh/known_hosts
-
-### Configure ssh for swilliams 
-sudo su - jenkins
-mkdir ~/.kube
-sudo su - jenkins ssh-keygen -t rsa -b 4096 -C "kendops2@gmail.com" -N '' <<<''
-ssh-keyscan github.com >> ~/.ssh/known_hosts
+# sudo -u jenkins ssh-keygen -t ed25519 -C "kendops2@gmail.com" -N '' <<<''
+sudo -u jenkins ssh-keygen -t rsa -b 4096 -C "kendops2@gmail.com" -N '' <<<''
+sudo -u jenkins ssh-keyscan github.com >> ~/.ssh/known_hosts
+sudo -u swilliams ssh-keygen -t rsa -b 4096 -C "kendops2@gmail.com" -N '' <<<''
 
 ### Instyall kubectl 
 sudo curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
@@ -95,10 +88,12 @@ sudo usermod -aG docker root
 # docker pull centos:latest
 # docker images
 
+sudo cat /var/lib/jenkins/secrets/initialAdminPassword
+
 # # Use your email for Jenkins GitHub account
 # sudo mkdir -p /var/lib/jenkins/.ssh/
 # sudo chmod 777 -R /var/lib/jenkins/.ssh/
-# # sudo -u jenkins ssh-keygen -t ed25519 -C "kendops2@gmail.com" -N '' <<<''
+# # sudo -u jenkins ssh-keygen -t ed25519 -C "kendops2@gmail.com" -N '' <<<''cat id 
 # sudo chmod -R u=rwx /var/lib/jenkins/.ssh/
 # sudo chmod -R go=--- /var/lib/jenkins/.ssh/
 # sudo chown -R jenkins:jenkins /var/lib/jenkins/.ssh/

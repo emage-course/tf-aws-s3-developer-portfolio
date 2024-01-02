@@ -4,33 +4,52 @@ resource "aws_instance" "jenkins" {
   instance_type          = var.instance_type
   subnet_id              = aws_default_subnet.default_az1.id
   vpc_security_group_ids = [aws_security_group.jenkins_sg.id]
-  key_name               = aws_key_pair.ssh_key.key_name
+  # key_name               = aws_key_pair.ssh_key.key_name
+  key_name = file("files/id_rsa.pub")
   user_data              = file("files/install_jenkins.sh")
+
+
+  # root disk
+  root_block_device {
+    volume_size           = "30"
+    volume_type           = "gp2"
+    encrypted             = true
+    delete_on_termination = true
+  }
+
   tags = {
     Name = "jenkins-server"
   }
 }
+# resource "time_sleep" "wait_30_seconds" {
+#   depends_on       = [aws_instance.jenkins]
+#   destroy_duration = "30s"
+# }
 
-# # an empty resource block
-resource "null_resource" "name" {
-  connection {
-    type        = "ssh"
-    user        = "ec2-user"
-    private_key = file("~/.ssh/id_rsa")
-    host        = aws_eip.jenkins_eip.public_ip
-    # host        = aws_instance.ec2_instance.public_ip
-  }
+# # # an empty resource block
+# resource "null_resource" "name" {
+#   connection {
+#     type        = "ssh"
+#     user        = "ec2-user"
+#     private_key = file("~/.ssh/id_rsa")
+#     host        = aws_eip.jenkins_eip.public_ip
+#     # host        = aws_instance.ec2_instance.public_ip
+#   }
 
-  # Deploy manifest 
-  provisioner "remote-exec" {
-    inline = [
-      "sudo df -hP",
-      "sudo ps -ef | grep jenkins",
-    ]
-  }
-  depends_on = [aws_instance.jenkins]
+#   provisioner "remote-exec" {
+#     inline = [
+#       "sudo df -hP",
+#       "sudo sleep 30s",
+#       "sudo systemctl status jenkins",
+#       "sudo cat /var/lib/jenkins/secrets/initialAdminPassword",
+#     ]
+#   }
+#   # depends_on = [time_sleep.wait_30_seconds]
+#   #depends_on = [aws_instance.jenkins]
+# }
 
-}
+#   # Deploy manifest 
+# depends_on = [aws_instance.jenkins]
 
 ### Copy sshkey remotely for swilliams 
 # provisioner "local-exec" {
