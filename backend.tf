@@ -1,6 +1,6 @@
 terraform {
   backend "s3" {
-    bucket         = "tf-remote-backend-state-lab20231114133906936800000001"
+    bucket         = "website-kendopx-bucket"
     key            = "terra-backend/terraform.tfstate"
     encrypt        = true
     region         = "us-east-2"
