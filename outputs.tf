@@ -20,7 +20,7 @@ output "instance_id" {
 }
 
 output "ssh_connection" {
-  value       = "ssh ec2-user@${aws_route53_zone.solyspace.name}"
+  value       = "ssh ec2-user@${aws_route53_record.solyspace.name}"
   description = "Connect via SSH"
 }
 
