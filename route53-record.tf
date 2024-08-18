@@ -10,12 +10,12 @@
 # }
 
 # Define the Route 53 hosted zone
-resource "aws_route53_zone" "solvwebs" {
+resource "aws_route53_zone" "solyspace" {
   name = "solyspace.net"
 }
 
 # Create an A record in the hosted zone
-resource "aws_route53_record" "solvwebs" {
+resource "aws_route53_record" "solyspace" {
   zone_id    = "Z05238077JTEPLY1VN0W"
   name       = "jenkins"
   type       = "A"
