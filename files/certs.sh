@@ -21,8 +21,8 @@ basicConstraints=CA:FALSE
 keyUsage = digitalSignature, nonRepudiation, keyEncipherment, dataEncipherment
 subjectAltName = @alt_names
 [alt_names]
-DNS.1 = kendopx.com
-DNS.2 = jenkins.kendopx.com
+DNS.1 = solvwebs.net
+DNS.2 = jenkins.solvwebs.net
 IP.1 = 3.131.188.146
 EOF
 
@@ -34,11 +34,11 @@ openssl x509 -req -sha256 -days 1024 -in localhost.csr -CA RootCA.pem -CAkey Roo
 
 ### Convert to support https
 sudo mkdir -p /etc/jenkins/ssl
-sudo cp localhost.crt /etc/jenkins/ssl/jenkins.kendopx.com.crt
-sudo cp localhost.crt /etc/jenkins/ssl/registry.jenkins.kendopx.com.crt
-sudo cp localhost.key /etc/jenkins/ssl/jenkins.kendopx.com.key
-sudo cp localhost.key /etc/jenkins/ssl/registry.jenkins.kendopx.com.key
+sudo cp localhost.crt /etc/jenkins/ssl/jenkins.solvwebs.net.crt
+sudo cp localhost.crt /etc/jenkins/ssl/registry.jenkins.solvwebs.net.crt
+sudo cp localhost.key /etc/jenkins/ssl/jenkins.solvwebs.net.key
+sudo cp localhost.key /etc/jenkins/ssl/registry.jenkins.solvwebs.net.key
 
 ### For Docker to connect to self signed jenkins server, we have to add the certificate in following location:
-sudo mkdir -p /etc/docker/certs.d/registry.jenkins.kendopx.com
-sudo cp localhost.crt /etc/docker/certs.d/registry.jenkins.kendopx.com/ca.crt
+sudo mkdir -p /etc/docker/certs.d/registry.jenkins.solvwebs.net
+sudo cp localhost.crt /etc/docker/certs.d/registry.jenkins.solvwebs.net/ca.crt

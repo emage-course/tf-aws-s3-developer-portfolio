@@ -3,13 +3,24 @@
 #   description = "Public IP Address of EC2 instance"
 # }
 
+
+output "id" {
+  description = "Contains the EIP allocation ID"
+  value       = aws_eip.jenkins_eip.id
+}
+
+output "public_ip" {
+  description = "Contains the public IP address"
+  value       = aws_eip.jenkins_eip.public_ip
+}
+
 output "instance_id" {
   value       = aws_instance.jenkins.*.id
   description = "Instance ID"
 }
 
 output "ssh_connection" {
-  value       = "ssh ec2-user@${cloudflare_record.devopx.hostname}"
+  value       = "ssh ec2-user@${aws_route53_zone.solvwebs.name}"
   description = "Connect via SSH"
 }
 
@@ -35,15 +46,15 @@ output "jenkins_url" {
 
 ####################################################
 
-output "record" {
-  value = join("", ["http://", cloudflare_record.devopx.hostname, ":", "8080"])
-}
+# output "record" {
+#   value = join("", ["http://", cloudflare_record.devopx.hostname, ":", "8080"])
+# }
 
-output "record_cloudbees" {
-  value = join("", ["http://", cloudflare_record.devopx.hostname, ":", "8888"])
-}
+# output "record_cloudbees" {
+#   value = join("", ["http://", cloudflare_record.devopx.hostname, ":", "8888"])
+# }
 
-output "metadata" {
-  value     = cloudflare_record.devopx.metadata
-  sensitive = true
-}
+# output "metadata" {
+#   value     = cloudflare_record.devopx.metadata
+#   sensitive = true
+# }
