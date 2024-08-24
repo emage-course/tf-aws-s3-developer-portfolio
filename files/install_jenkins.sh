@@ -10,7 +10,7 @@ sudo yum install java-11-amazon-corretto -y
 sudo yum install git jq -y
 sudo yum install jenkins -y
 sudo systemctl enable jenkins
-sudo systemctl restart jenkins
+sudo systemctl start jenkins
 sudo systemctl status jenkins
 
 ### Configure Jenkins User 
@@ -90,31 +90,3 @@ sudo usermod -aG docker root
 
 sudo cat /var/lib/jenkins/secrets/initialAdminPassword
 
-# # Use your email for Jenkins GitHub account
-# sudo mkdir -p /var/lib/jenkins/.ssh/
-# sudo chmod 777 -R /var/lib/jenkins/.ssh/
-# # sudo -u jenkins ssh-keygen -t ed25519 -C "kendops2@gmail.com" -N '' <<<''cat id 
-# sudo chmod -R u=rwx /var/lib/jenkins/.ssh/
-# sudo chmod -R go=--- /var/lib/jenkins/.ssh/
-# sudo chown -R jenkins:jenkins /var/lib/jenkins/.ssh/
-# sudo chmod -R u=rw,go=r /var/lib/jenkins/.ssh/id_rsa.pub
-# sudo chmod -R u=rw,go=-- /var/lib/jenkins/.ssh/id_rsa
-
-### verify
-# sudo ls -lrt /var/lib/jenkins/.ssh/
-# sudo ls -lrtd /var/lib/jenkins/.ssh/
-# sudo grep jenkins /etc/passwd 
-# sudo grep jenkins /etc/sudoers
-# sudo cat /var/lib/jenkins/secrets/initialAdminPassword 
-# sudo cat /var/lib/cloudbees-core-oc/secrets/initialAdminPassword
-
-### Display SSH Keys
-# sudo cat /var/lib/jenkins/.ssh/id_rsa
-# sudo cat /var/lib/jenkins/.ssh/id_rsa.pub 
-# sudo grep jenkins /etc/sudoers
-
-# helm repo add cloudbees https://public-charts.artifacts.cloudbees.com/repository/public/
-# helm repo update
-# kubectl create namespace cloudbees-core
-# helm install cloudbees-core cloudbees/cloudbees-core  --namespace cloudbees-core  --set OperationsCenter.HostName='cloudbees-kendopz.com'  --set OperationsCenter.Ingress.tls.Enable=true
-# kubectl exec cjoc-0 -- cat /var/jenkins_home/secrets/initialAdminPassword
