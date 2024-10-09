@@ -22,12 +22,13 @@ sudo usermod --shell /bin/bash jenkins
 
 ### Install cloudbees 
 sudo wget -O /etc/yum.repos.d/cloudbees-core-oc.repo https://downloads.cloudbees.com/cloudbees-core/traditional/operations-center/rolling/rpm/cloudbees-core-oc.repo
-sudo rpm --import "https://downloads.cloudbees.com/jenkins-operations-center/rolling/rpm/cloudbees.com.key"
+sudo rpm --import "https://downloads.cloudbees.com/cloudbees-core/traditional/operations-center/rolling/rpm/cloudbees.com.key"
 sudo yum install cloudbees-core-oc -y 
 # sudo yum httpd-core -y 
 # sudo yum install httpd mod_ssl
 systemctl daemon-reload
 systemctl enable cloudbees-core-oc
+systemctl stop cloudbees-core-oc
 systemctl start cloudbees-core-oc
 systemctl status cloudbees-core-oc
 
@@ -82,6 +83,7 @@ sudo systemctl status docker.service
 sudo set enforce 0
 sudo groupadd docker
 sudo usermod -aG docker ec2-user
+sudo usermod  -aG jenkins ec2-user
 sudo usermod -aG docker jenkins 
 sudo usermod -aG docker swilliams 
 sudo usermod -aG docker root

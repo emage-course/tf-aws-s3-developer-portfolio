@@ -10,8 +10,8 @@
 # }
 
 # Create an A record in the hosted zone
-resource "aws_route53_record" "solyspace" {
-  zone_id    = "Z05238077JTEPLY1VN0W"
+resource "aws_route53_record" "emagetech" {
+  zone_id    = "Z06639414QTF8GXLZVRH"
   name       = "jenkins"
   type       = "A"
   ttl        = "300"

@@ -20,7 +20,7 @@ output "instance_id" {
 }
 
 output "ssh_connection" {
-  value       = "ssh ec2-user@${aws_route53_record.solyspace.name}"
+  value       = "ssh ec2-user@${aws_eip.jenkins_eip.public_ip}"
   description = "Connect via SSH"
 }
 
@@ -34,9 +34,14 @@ output "ssh_connection" {
 #   value = join("", ["http://", aws_instance.jenkins.public_dns, ":", "8080"])
 # }
 
-output "jenkins_url" {
+output "jenkins_url1" {
   description = "The public IP address of the Jenkins server"
   value       = join("", ["http://", aws_eip.jenkins_eip.public_ip, ":", "8080"])
+}
+
+output "jenkins_url2" {
+  description = "The public IP address of the Jenkins server"
+  value       = "http://jenkins.emagetech.co:8080"
 }
 
 ####################################################

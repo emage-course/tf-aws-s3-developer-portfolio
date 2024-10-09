@@ -1,10 +1,11 @@
 # launch the ec2 instance and install website
 resource "aws_instance" "jenkins" {
-  ami                    = data.aws_ami.amzlinux2.id
+  #ami                    = data.aws_ami.amzlinux2.id
+  ami                    = "ami-0c6d2bc35c65a2a45"
   instance_type          = var.instance_type
   subnet_id              = aws_default_subnet.default_az1.id
   vpc_security_group_ids = [aws_security_group.jenkins_sg.id]
-  key_name               = aws_key_pair.ssh_key.key_name
+  key_name               = aws_key_pair.jenkins-key.key_name
   user_data              = file("files/install_jenkins.sh")
 
 
@@ -17,60 +18,42 @@ resource "aws_instance" "jenkins" {
   }
 
   tags = {
-    Name = "jenkins-server"
+    Name = "jenkins.emagetech.co"
   }
 }
-# resource "time_sleep" "wait_30_seconds" {
-#   depends_on       = [aws_instance.jenkins]
-#   destroy_duration = "30s"
-# }
 
-# # # an empty resource block
-# resource "null_resource" "name" {
-#   connection {
-#     type        = "ssh"
-#     user        = "ec2-user"
-#     private_key = file("~/.ssh/id_rsa")
-#     host        = aws_eip.jenkins_eip.public_ip
-#     # host        = aws_instance.ec2_instance.public_ip
-#   }
+resource "null_resource" "initialAdminPassword" {
+  depends_on = [
 
-#   provisioner "remote-exec" {
-#     inline = [
-#       "sudo df -hP",
-#       "sudo sleep 30s",
-#       "sudo systemctl status jenkins",
-#       "sudo cat /var/lib/jenkins/secrets/initialAdminPassword",
-#     ]
-#   }
-#   # depends_on = [time_sleep.wait_30_seconds]
-#   #depends_on = [aws_instance.jenkins]
-# }
+    # Running of the playbook depends on the successfull creation of the EC2
+    # instance and the local inventory file.
 
-#   # Deploy manifest 
-# depends_on = [aws_instance.jenkins]
+    aws_route53_record.emagetech
+  ]
 
-### Copy sshkey remotely for swilliams 
-# provisioner "local-exec" {
-#   command = "ssh-copy-id -i ~/.ssh/id_rsa.pub swilliams@${cloudflare_record.devopx.hostname}"
-#command = "ssh-copy-id -i  var.ssh_key_pair swilliams@${cloudflare_record.devopx.hostname}"
-# }
+  provisioner "local-exec" {
+    command = "ssh -q -o StrictHostKeyChecking=no ec2-user@jenkins.emagetech.co 'sudo cat /var/lib/jenkins/secrets/initialAdminPassword'"
+  }
+}
 
-#   # copy the install_jenkins.sh file from your computer to the ec2 instance 
-#   provisioner "file" {
-#     source      = "files/install_jenkins.sh"
-#     destination = "/tmp/install_jenkins.sh"
-#   }
+resource "null_resource" "jenkins-status" {
+  provisioner "remote-exec" {
+    connection {
+      type        = "ssh"
+      user        = "ec2-user"
+      private_key = file("~/.ssh/id_rsa")
+      host        = aws_eip.jenkins_eip.public_ip
+    }
 
-#   # set permissions and run the install_jenkins.sh file
-#   provisioner "remote-exec" {
-#     inline = [
-#       "sudo chmod +x /tmp/install_jenkins.sh",
-#       "sh /tmp/install_jenkins.sh",
-#     ]
-#   }
+    inline = [
+      "sudo systemctl status jenkins",
+      "df -Ph"
+    ]
+  }
 
-#   # wait for ec2 to be created
-#   depends_on = [aws_instance.jenkins]
-# }
+  depends_on = [
+    aws_route53_record.emagetech
+  ]
+}
+
 
