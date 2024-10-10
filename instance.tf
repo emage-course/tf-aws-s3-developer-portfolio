@@ -22,38 +22,4 @@ resource "aws_instance" "jenkins" {
   }
 }
 
-resource "null_resource" "initialAdminPassword" {
-  depends_on = [
-
-    # Running of the playbook depends on the successfull creation of the EC2
-    # instance and the local inventory file.
-
-    aws_route53_record.emagetech
-  ]
-
-  provisioner "local-exec" {
-    command = "ssh -q -o StrictHostKeyChecking=no ec2-user@jenkins.emagetech.co 'sudo cat /var/lib/jenkins/secrets/initialAdminPassword'"
-  }
-}
-
-resource "null_resource" "jenkins-status" {
-  provisioner "remote-exec" {
-    connection {
-      type        = "ssh"
-      user        = "ec2-user"
-      private_key = file("~/.ssh/id_rsa")
-      host        = aws_eip.jenkins_eip.public_ip
-    }
-
-    inline = [
-      "sudo systemctl status jenkins",
-      "df -Ph"
-    ]
-  }
-
-  depends_on = [
-    aws_route53_record.emagetech
-  ]
-}
-
 

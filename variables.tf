@@ -9,7 +9,7 @@ variable "region" {
 variable "instance_type" {
   description = "EC2 Instance Type"
   type        = string
-  default     = "t2.xlarge"
+  default     = "t2.large"
 }
 
 variable "ec2_count" {
